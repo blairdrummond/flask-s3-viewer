@@ -29,13 +29,15 @@ class AWSS3Client(AWSSession):
         access_key=None,
         cache_dir=None,
         ttl=None,
-        use_cache=False
+        use_cache=False,
+        use_ssl=True    
     ):
         super().__init__(
             profile_name=profile_name,
             region_name=region_name,
             secret_key=secret_key,
-            access_key=access_key
+            access_key=access_key,
+            use_ssl=use_ssl
         )
 
         if not self.runnable:
@@ -47,6 +49,7 @@ class AWSS3Client(AWSSession):
         self._s3 = self._session.client(
             's3',
             region_name=self.region_name,
+            use_ssl=use_ssl,
             endpoint_url=endpoint_url,
             config=Config(signature_version='s3v4')
         )
