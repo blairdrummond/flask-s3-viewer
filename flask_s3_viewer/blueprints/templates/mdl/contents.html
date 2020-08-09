@@ -18,7 +18,8 @@
         <div class="mdl-tooltip" data-mdl-for="tcopy{{ loop.index }}">
           Copy to clipboard
         </div>
-        <button id="tdown{{ loop.index }}" onclick="location.href='{{ url_for('flask_s3_viewer.files_download', key=c.Key|urlencode) }}';" class="mdl-button mdl-button--icon mdl-button--primary">
+        <!-- <button id="tdown{{ loop.index }}" onclick="location.href='{{ url_for('flask_s3_viewer.files_download', key=c.Key|urlencode) }}';" class="mdl-button mdl-button--icon mdl-button--primary"> -->
+        <button id="tdown{{ loop.index }}" onclick="FLASK_S3_VIEWER_CORE.downloadFile(event, '{{ c.Key }}', callbackDownloadFile);" class="mdl-button mdl-button--icon mdl-button--primary">
           <i class="material-icons">save_alt</i>
         </button>
         <div class="mdl-tooltip" data-mdl-for="tdown{{ loop.index }}">

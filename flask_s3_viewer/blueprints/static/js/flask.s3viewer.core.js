@@ -52,7 +52,7 @@ var FLASK_S3_VIEWER_CORE = (function(){
     value = encodeURIComponent(value);
     var kvp = [];
     kvp = document.location.search.substr(1).split('&');
-    var i=kvp.length; var x; 
+    var i=kvp.length; var x;
     while(i--){
       x = kvp[i].split('=');
       if (x[0]==key){
@@ -335,6 +335,30 @@ var FLASK_S3_VIEWER_CORE = (function(){
     xhr.send(formData);
   }
 
+
+  function downloadFile(e, key, callback, el) {
+    //key: decoded
+    if (e != null){
+      e = e || window.event;
+      preventDefaults(e);
+    }
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', FLASK_S3_VIEWER_FILES_ENDPOINT + '/' + encodeURIComponent(key), true);
+    xhr.addEventListener('readystatechange', function(xe) {
+      if (xhr.readyState == 4) {
+        if (xhr.status == 204) {
+          __addRefreshingBadge(1);
+        } else {
+
+        }
+        if (typeof callback === 'function') {
+          callback(e, xhr, key, el);
+        }
+      }
+    });
+    xhr.send();
+  }
+
   function deleteFile(e, key, callback, el) {
     //key: decoded
     if (e != null){
@@ -362,6 +386,7 @@ var FLASK_S3_VIEWER_CORE = (function(){
   return {
     makeDir: makeDir,
     deleteFile: deleteFile,
+    downloadFile: downloadFile,
     copyToClipboard: copyToClipboard,
     uploadFiles: uploadFiles,
     preventDefaults: preventDefaults,
