@@ -1,6 +1,7 @@
 import urllib
 import unicodedata
 import os
+from os.path import basename
 
 from werkzeug.wsgi import FileWrapper
 from werkzeug.urls import url_quote
@@ -40,11 +41,16 @@ def files_download(key):
         key: encoded
         """
         key = urllib.parse.unquote_plus(key)
+
+        # Need this later
+        fullkey = key
+        filename = basename(key)
+        
         fs3viewer = FlaskS3Viewer.get_instance(g.BUCKET_NAMESPACE)
         obj = fs3viewer.find_one(key)
         if obj:
             try:
-                key = os.path.basename(key).encode('latin-1')
+                key = basename(key).encode('latin-1')
             except UnicodeEncodeError:
                 encoded_key = unicodedata.normalize(
                     'NFKD',
@@ -56,16 +62,17 @@ def files_download(key):
                 }
             else:
                 filenames = {'filename': key}
-            rv = Response(
-                FileWrapper(obj.get('Body')),
-                direct_passthrough=True,
-                mimetype=obj['ContentType']
+
+            if not os.path.exists("/home/flask/data/"):
+                os.makedirs("/home/flask/data/")
+            
+            fs3viewer.download_one(
+                f"/home/flask/data/{filename}",
+                fullkey,
+                bucket_name = fs3viewer._bucket_name
             )
-            rv.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-            rv.headers['Pragma'] = 'no-cache'
-            rv.headers['Expires'] = '0'
-            rv.headers.set('Content-Disposition', 'attachment', **filenames)
-            return rv
+
+            return '', 204
         else:
             return render_template(
                 f'{fs3viewer.template_namespace}/error.html',
@@ -189,7 +196,8 @@ def files():
             FS3V_CONTENTS=content_pages[page] if content_pages else [],
             FS3V_PREFIXES=prefixes,
             FS3V_NEXT_TOKEN=next_token,
-            FS3V_OBJECT_HOSTNAME=fs3viewer.object_hostname
+            FS3V_OBJECT_HOSTNAME=fs3viewer.object_hostname,
+            FS3V_NAMESPACES = fs3viewer.FLASK_S3_VIEWER_BUCKET_CONFIGS
         )
 
 
