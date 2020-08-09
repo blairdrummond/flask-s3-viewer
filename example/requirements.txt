@@ -1,2 +1,4 @@
 Flask==1.1.1
-flask-s3-viewer
+git+https://github.com/blairdrummond/flask-s3-viewer.git@master
+flask-reverse-proxy-fix
+werkzeug==0.16.0
