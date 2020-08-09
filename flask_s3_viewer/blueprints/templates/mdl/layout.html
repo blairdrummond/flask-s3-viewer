@@ -23,7 +23,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
       <!-- ====== BLOCK TITLE ====== -->
-      <title>{% block title %}{% endblock %} | Flask_s3viewer</title>
+      <title>{% block title %}{% endblock %} | DAaaS Storage</title>
       <!--// ====== BLOCK TITLE ====== -->
 
       <!-- Dependecies -->
@@ -63,7 +63,7 @@
         <!-- ====== BLOCK HEADER ====== -->
         {% block header %}
           <div class="mdl-layout__header-row">
-            <span style="font-size: 17px;" class="mdl-layout-title">Flask S3 Viewer</span>
+            <span style="font-size: 17px;" class="mdl-layout-title">DAaaS Storage Viewer</span>
 
             <!-- ====== BLOCK CONTROLLER ====== -->
             {% block controller %}
@@ -92,10 +92,12 @@
         <!-- ====== BLOCK FOOTER ====== -->
         {% block footer %}
           <div class="mdl-mini-footer__left-section">
-            <div class="mdl-logo">Flask S3 Viewer</div>
+            <div class="mdl-logo">Buckets List</div>
             <ul class="mdl-mini-footer__link-list">
-              <li><a href="https://github.com/hidekuma/flask-s3-viewer/blob/master/README.md" target="_blank">Help</a></li>
-              <li><a href="https://github.com/hidekuma/flask-s3-viewer" target="_blank">Github</a></li>
+			  {% for namespace in FS3V_NAMESPACES %}
+              <li><a href="{{ url_for(namespace + '/files') }}" target="_blank">{{ namespace }}</a></li>
+			  {% endfor %}
+              <!-- <li><a href="https://github.com/blairdrummond/flask-s3-viewer" target="_blank">Github</a></li> -->
             </ul>
           </div>
         {% endblock %}
