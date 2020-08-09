@@ -36,8 +36,7 @@ class AWSS3Client(AWSSession):
             profile_name=profile_name,
             region_name=region_name,
             secret_key=secret_key,
-            access_key=access_key,
-            use_ssl=use_ssl
+            access_key=access_key
         )
 
         if not self.runnable:

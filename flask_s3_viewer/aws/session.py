@@ -21,15 +21,13 @@ class AWSSession:
             if not access_key or not secret_key:
                 self._session = boto3.Session(
                     profile_name=profile_name,
-                    region_name=region_name,
-                    use_ssl=use_ssl
+                    region_name=region_name
                 )
             else:
                 self._session = boto3.Session(
                     aws_access_key_id=access_key,
                     aws_secret_access_key=secret_key,
-                    region_name=region_name,
-                    use_ssl=use_ssl
+                    region_name=region_name
                 )
         except ClientError as e:
             logging.error(e)
