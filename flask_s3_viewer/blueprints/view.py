@@ -63,11 +63,13 @@ def files_download(key):
             else:
                 filenames = {'filename': key}
 
-            if not os.path.exists("/home/flask/data/"):
-                os.makedirs("/home/flask/data/")
+
+            ddir = fs3viewer.app.config['DOWNLOAD_DIR']
+            if not os.path.exists(ddir):
+                os.makedirs(ddir)
             
             fs3viewer.download_one(
-                f"/home/flask/data/{filename}",
+                f"{ddir}/{filename}",
                 fullkey,
                 bucket_name = fs3viewer._bucket_name
             )
@@ -197,7 +199,8 @@ def files():
             FS3V_PREFIXES=prefixes,
             FS3V_NEXT_TOKEN=next_token,
             FS3V_OBJECT_HOSTNAME=fs3viewer.object_hostname,
-            FS3V_NAMESPACES = fs3viewer.FLASK_S3_VIEWER_BUCKET_CONFIGS
+            FS3V_NAMESPACES = fs3viewer.FLASK_S3_VIEWER_BUCKET_CONFIGS,
+            FS3V_PREFIX = fs3viewer.app.config['REVERSE_PROXY_PATH'] if 'REVERSE_PROXY_PATH' in fs3viewer.app.config else ""
         )
 
 

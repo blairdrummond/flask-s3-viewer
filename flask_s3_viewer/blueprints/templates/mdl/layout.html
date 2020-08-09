@@ -95,7 +95,7 @@
             <div class="mdl-logo">Buckets List</div>
             <ul class="mdl-mini-footer__link-list">
 			  {% for namespace in FS3V_NAMESPACES %}
-              <li><a href="{{ url_for(namespace + '/files') }}" target="_blank">{{ namespace }}</a></li>
+              <li><a href="{{ FS3V_PREFIX + '/' + namespace + '/files' }}" target="_blank">{{ namespace }}</a></li>
 			  {% endfor %}
               <!-- <li><a href="https://github.com/blairdrummond/flask-s3-viewer" target="_blank">Github</a></li> -->
             </ul>
